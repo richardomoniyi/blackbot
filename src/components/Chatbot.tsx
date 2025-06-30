@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { X, MessageCircle, Send } from "lucide-react";
-import { getToken } from "../api/apicall";
+//import { getToken } from "../api/apicall";
 
 type Message = {
   role: "user" | "system" | "assistant";
@@ -55,7 +55,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen: initialIsOpen = false }) => {
 */
   // Inside your Chatbot component
   useEffect(() => {
-    if (isOpen) setMessages([{ role: "system", content: "Hello" }]);
+    if (isOpen) setMessages([{ role: "user", content: "Hello" }]);
     if (isOpen && !sessionEnded) {
       resetInactivityTimer();
     }
