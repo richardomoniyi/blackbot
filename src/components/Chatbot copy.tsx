@@ -54,10 +54,9 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen: initialIsOpen = false }) => {
   }, [isOpen]);
 */
   // Inside your Chatbot component
-  // When isOpen becomes true, send the default message
   useEffect(() => {
+    if (isOpen) setMessages([{ role: "user", content: "..." }]);
     if (isOpen && !sessionEnded) {
-      sendMessage("...");
       resetInactivityTimer();
     }
     // Clean up on unmount
@@ -72,25 +71,24 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen: initialIsOpen = false }) => {
     }
   }, [messages]);
 
-  const sendMessage = async (messageToSend?: string) => {
-    const message = messageToSend !== undefined ? messageToSend : input;
-    if (!message.trim()) return;
+  const sendMessage = async () => {
+    if (!input.trim()) return;
 
-    const userMessage: Message = { role: "user", content: message };
+    const userMessage: Message = { role: "user", content: input };
     setMessages((prev) => [...prev, userMessage]);
-    if (messageToSend === undefined) setInput("");
+    setInput("");
     setLoading(true); // Show spinner
 
     try {
       const payload = {
         reference: referenceRef.current,
-        message,
+        message: input,
       };
 
       const response = await axios.post(apiUrl, payload, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`, // Use the token from your environment variable
         },
       });
       const botMessage: Message = {
@@ -225,7 +223,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen: initialIsOpen = false }) => {
             />
             <button
               className="bg-blue-500 text-white px-4 rounded-r-lg flex items-center justify-center"
-              onClick={() => sendMessage()}
+              onClick={sendMessage}
             >
               <Send size={20} />
             </button>
