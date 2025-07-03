@@ -57,7 +57,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen: initialIsOpen = false }) => {
   // When isOpen becomes true, send the default message
   useEffect(() => {
     if (isOpen && !sessionEnded) {
-      //sendMessage("...");
+      sendMessage("...");
       resetInactivityTimer();
     }
     // Clean up on unmount
